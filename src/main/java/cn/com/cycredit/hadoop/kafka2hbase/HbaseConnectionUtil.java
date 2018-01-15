@@ -14,7 +14,7 @@ public class HbaseConnectionUtil {
      * @throws IOException
      */
     public static synchronized Connection getConnection() throws IOException {
-        if (connection != null) {
+        if (connection  != null) {
             return connection;
         }
         return ConnectionFactory.createConnection(TableInformationCY.getHBaseConfiguration());
