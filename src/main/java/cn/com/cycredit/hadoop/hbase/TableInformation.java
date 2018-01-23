@@ -14,18 +14,20 @@ import java.io.IOException;
 
 public class TableInformation {
 
-  public static final String TABLE_NAME = "enterprise_credit_test";
+  public static final String TABLE_NAME = "test_now";
   public static final String FAMILY_NAME_1 = "sp";
   public static final String FAMILY_NAME_2 = "profile";
+  public static final String FAMILY_NAME_INFOS = "infos";
   public static final String QUALIFIER_NAME_1_1 = "iname";
   public static final String QUALIFIER_NAME_1_2 = "art";
   public static final String QUALIFIER_NAME_2_1 = "gender";
   public static final String QUALIFIER_NAME_2_2 = "name";
+  public static final String QUALIFIER_SCORE = "score";
 
   public static Configuration getHBaseConfiguration() {
     Configuration conf = HBaseConfiguration.create();
     conf.set("hbase.zookeeper.quorum",
-        "cdh0");
+        "10.3.2.93");
     conf.set("zookeeper.znode.parent", "/hbase");
 
     return conf;

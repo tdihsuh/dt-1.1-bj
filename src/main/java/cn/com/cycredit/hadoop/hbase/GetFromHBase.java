@@ -14,9 +14,9 @@ public class GetFromHBase {
     connection = ConnectionFactory.createConnection(conf);
 
     Table table = connection.getTable(TableName.valueOf(TableInformation.TABLE_NAME));
-    System.out.println(Bytes.toBytes("郑州名景遮阳技术有限公司"));
-    Get get = new Get(Bytes.toBytes("郑州名景遮阳技术有限公司"));
+    Get get = new Get(Bytes.toBytes("row1"));
     get.addColumn(Bytes.toBytes(TableInformation.FAMILY_NAME_1), Bytes.toBytes(TableInformation.QUALIFIER_NAME_1_1));
+    get.addColumn(Bytes.toBytes(TableInformation.FAMILY_NAME_2), Bytes.toBytes(TableInformation.QUALIFIER_NAME_2_1));
     Result result = table.get(get);
     while (result.advance()) {
       System.out.println(result.current());
