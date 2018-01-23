@@ -1,4 +1,4 @@
-package cn.com.cycredit.hadoop.hbase;
+package cn.com.cycredit.hadoop.score;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;

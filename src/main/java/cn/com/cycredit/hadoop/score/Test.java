@@ -1,4 +1,4 @@
-package cn.com.cycredit.hadoop.hbase;
+package cn.com.cycredit.hadoop.score;
 
 public class Test {
     public static void  main(String[] args){

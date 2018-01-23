@@ -1,4 +1,4 @@
-package cn.com.cycredit.hadoop.hbase;
+package cn.com.cycredit.hadoop.score;
 
 import net.sf.json.JSONObject;
 import org.apache.hadoop.conf.Configuration;
