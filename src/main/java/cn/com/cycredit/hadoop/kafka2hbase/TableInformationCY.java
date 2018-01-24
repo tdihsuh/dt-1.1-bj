@@ -8,6 +8,15 @@ public class TableInformationCY {
   public static final String TABLE_NAME_ENTERPRISE = "enterprise_credit_test";
   public static final String TABLE_NAME_INDIVIDUAL = "individual_credit_test";
 
+  public static Configuration getHBaseConfiguration() {
+    Configuration conf = HBaseConfiguration.create();
+    conf.set("hbase.zookeeper.quorum",
+            "cdh0");
+    conf.set("zookeeper.znode.parent", "/hbase");
+
+    return conf;
+  }
+
   // 农业部行政处罚
   public static final String FAMILY_NAME_AG = "ag";
   // 政府行政处罚
@@ -265,15 +274,6 @@ public class TableInformationCY {
   public static final String QUALIFIER_NAME_TR_12 = "permit_number";
   public static final String QUALIFIER_NAME_TR_13 = "name";
   public static final String QUALIFIER_NAME_TR_14 = "start_time";
-
-  public static Configuration getHBaseConfiguration() {
-    Configuration conf = HBaseConfiguration.create();
-    conf.set("hbase.zookeeper.quorum",
-            "cdh0");
-    conf.set("zookeeper.znode.parent", "/hbase");
-
-    return conf;
-  }
 
 
 }
