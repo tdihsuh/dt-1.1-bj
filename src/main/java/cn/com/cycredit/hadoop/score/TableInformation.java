@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class TableInformation {
 
-  public static final String TABLE_NAME = "test_now";
+  public static final String TABLE_NAME = "enterprise_credit_test";
   public static final String FAMILY_NAME_1 = "sp";
   public static final String FAMILY_NAME_2 = "profile";
   public static final String FAMILY_NAME_INFOS = "infos";

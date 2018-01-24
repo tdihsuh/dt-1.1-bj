@@ -21,27 +21,28 @@ public class CreditScoreCalculate {
 
     Scan scan = new Scan();
     scan.setMaxVersions(256);
-    scan.setCaching(1);
+    scan.setCaching(10);
     ResultScanner results = table.getScanner(scan);
     int i = 0;
     for (Result result : results) {
-      String str = "";
+      StringBuffer str = new StringBuffer("");
       String rowname = "";
       while (result.advance()) {
         Cell currentCell = result.current();
-        String cellToString = currentCell.toString() + "/value=" + Bytes.toString(currentCell.getValueArray(), currentCell.getValueOffset(), currentCell.getValueLength());
-        System.out.println(cellToString);
-        str += "[[" + cellToString + "]]";
+        if(currentCell.toString().contains("source_page")){continue;}
+        StringBuffer cellToString = new StringBuffer(currentCell.toString()).append("/value=").append(Bytes.toString(currentCell.getValueArray(), currentCell.getValueOffset(), currentCell.getValueLength()));
+//        System.out.println(cellToString);
+        str.append("[[").append(cellToString).append("]]");
         if("".equals(rowname)){
           rowname = Bytes.toString(result.getRow());
         }
       }
-      int score = scoreCompute(str);
+      int score = scoreCompute(str.toString());
       Put put = new Put(Bytes.toBytes(rowname));
       put.addColumn(Bytes.toBytes(TableInformation.FAMILY_NAME_INFOS), Bytes.toBytes(TableInformation.QUALIFIER_SCORE), Bytes.toBytes("" + score));
       table.put(put);
       if(++i %100 ==0 ){
-        System.out.println("已经更新第"+ i +"个实体的薪信用分");
+        System.out.println("已经更新第"+ i +"个实体的信用分");
       }
     }
     table.close();
