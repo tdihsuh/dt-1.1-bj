@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ScanFromHBase {
+public class CreditScoreCalculate {
 
   public static void scan(Configuration conf) throws IOException {
     Connection connection = null;
@@ -48,75 +48,75 @@ public class ScanFromHBase {
     int score = 0;
     ArrayList<Integer> counts = new ArrayList<Integer>();
 
-    int agScore = ScanFromHBase.getTopicScore(str, "ag:pun_type",
+    int agScore = CreditScoreCalculate.getTopicScore(str, "ag:pun_type",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 3, 3, 9, 9, 9});
     counts.add(agScore);
 
-    int cbScore = ScanFromHBase.getTopicScore(str, "cb:decision",
+    int cbScore = CreditScoreCalculate.getTopicScore(str, "cb:decision",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 3, 3, 9, 9, 9});
     counts.add(cbScore);
 
-    int ciScore = ScanFromHBase.getTopicScore(str, "ci:content",
+    int ciScore = CreditScoreCalculate.getTopicScore(str, "ci:content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 3, 3, 9, 9, 9});
     counts.add(ciScore);
 
-    int csScore = ScanFromHBase.getTopicScore(str, "cs:pun_content",
+    int csScore = CreditScoreCalculate.getTopicScore(str, "cs:pun_content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 3, 3, 9, 9, 9});
     counts.add(csScore);
 
-    int cmScore = ScanFromHBase.getTopicScore(str, "cm:pun_content",
+    int cmScore = CreditScoreCalculate.getTopicScore(str, "cm:pun_content",
             new String[]{"ELSE", "警告", "通报批评", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(cmScore);
 
 
-    int trScore = ScanFromHBase.getTopicScore(str, "tr:penalty_content",
+    int trScore = CreditScoreCalculate.getTopicScore(str, "tr:penalty_content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令整改", "暂扣","吊销","行政拘留"},
             new int[]{1, 1, 3, 3, 9, 9, 9});
     counts.add(trScore);
 
-//    int dpScore = ScanFromHBase.getTopicScore(str, "dp:penalty_content", new String[]{"ELSE", "警告", "拘留"}, new int[]{1, 1, 6});
+//    int dpScore = CreditScoreCalculate.getTopicScore(str, "dp:penalty_content", new String[]{"ELSE", "警告", "拘留"}, new int[]{1, 1, 6});
 //    counts.add(dpScore);
 //
-    int oeScore = ScanFromHBase.getTopicScore(str, "oe:pun_reason",
+    int oeScore = CreditScoreCalculate.getTopicScore(str, "oe:pun_reason",
             new String[]{"ELSE", "企业异常名录", "企业严重违法"},
             new int[]{1, 1, 9});
     counts.add(oeScore);
 
-    int mtScore = ScanFromHBase.getTopicScore(str, "mt:uncredit_content",
+    int mtScore = CreditScoreCalculate.getTopicScore(str, "mt:uncredit_content",
             new String[]{"ELSE", "伪造发票", "偷税漏税"},
             new int[]{9, 9, 9});
     counts.add(mtScore);
 
-    int gpScore = ScanFromHBase.getTopicScore(str, "gp:pun_content",
+    int gpScore = CreditScoreCalculate.getTopicScore(str, "gp:pun_content",
             new String[]{"ELSE", "通报批评", "罚款", "禁止参加政府采购活动", "撤销政府采购代理机构的资格", "撤销中标"},
             new int[]{1, 1, 1, 3, 9, 9});
     counts.add(gpScore);
 
 
-    int sbScore = ScanFromHBase.getTopicScore(str, "sb:info_source",
+    int sbScore = CreditScoreCalculate.getTopicScore(str, "sb:info_source",
             new String[]{"ELSE", "隐患曝光", "重大事故通报"},
             new int[]{1, 3, 9});
     counts.add(sbScore);
 
-    int fmScore = ScanFromHBase.getTopicScore(str, "fm:operation",
+    int fmScore = CreditScoreCalculate.getTopicScore(str, "fm:operation",
             new String[]{"ELSE", "注销", "撤销证书", "限期整改", "违法广告", "食品抽检不合格", "食品安全审计通报"},
             new int[]{1, 9, 9, 9, 3, 9, 1});
     counts.add(fmScore);
 
-//    int qbScore = ScanFromHBase.getTopicScore(str, "qb:penalty_content", new String[]{"ELSE", "警告", "拘留"}, new int[]{1, 1, 6});
+//    int qbScore = CreditScoreCalculate.getTopicScore(str, "qb:penalty_content", new String[]{"ELSE", "警告", "拘留"}, new int[]{1, 1, 6});
 //    counts.add(qbScore);
 
-    int cuScore = ScanFromHBase.getTopicScore(str, "cu:entity_name",
+    int cuScore = CreditScoreCalculate.getTopicScore(str, "cu:entity_name",
             new String[]{"ELSE"},
             new int[]{9});
     counts.add(cuScore);
 
-    int spScore = ScanFromHBase.getTopicScore(str, "sp:status",
+    int spScore = CreditScoreCalculate.getTopicScore(str, "sp:status",
             new String[]{"ELSE", "全部未履行", "部分未履行"},
             new int[]{1, 9, 3});
     counts.add(spScore);
@@ -488,7 +488,7 @@ public class ScanFromHBase {
   }
 
   public static void main(String args[]) throws IOException {
-    ScanFromHBase.scan(TableInformation.getHBaseConfiguration());
+    CreditScoreCalculate.scan(TableInformation.getHBaseConfiguration());
 
   }
 }
