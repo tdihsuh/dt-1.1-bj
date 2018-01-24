@@ -1,6 +1,8 @@
 package cn.com.cycredit.hadoop.score;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -26,8 +28,10 @@ public class CreditScoreCalculate {
       String str = "";
       String rowname = "";
       while (result.advance()) {
-        System.out.println(result.current());
-        str += "[[" + result.current().toString() + "]]";
+        Cell currentCell = result.current();
+        String cellToString = currentCell.toString() + "/value=" + Bytes.toString(currentCell.getValueArray(), currentCell.getValueOffset(), currentCell.getValueLength());
+        System.out.println(cellToString);
+        str += "[[" + cellToString + "]]";
         if("".equals(rowname)){
           rowname = Bytes.toString(result.getRow());
         }
@@ -48,24 +52,29 @@ public class CreditScoreCalculate {
     int score = 0;
     ArrayList<Integer> counts = new ArrayList<Integer>();
 
+    int infoScore = CreditScoreCalculate.getTopicScore(str, "infos:name",
+            new String[]{"ELSE", "李新虎"},
+            new int[]{1, 100});
+    counts.add(infoScore);
+
     int agScore = CreditScoreCalculate.getTopicScore(str, "ag:pun_type",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
-            new int[]{1, 1, 3, 3, 9, 9, 9});
+            new int[]{1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(agScore);
 
     int cbScore = CreditScoreCalculate.getTopicScore(str, "cb:decision",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
-            new int[]{1, 1, 3, 3, 9, 9, 9});
+            new int[]{1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(cbScore);
 
     int ciScore = CreditScoreCalculate.getTopicScore(str, "ci:content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
-            new int[]{1, 1, 3, 3, 9, 9, 9});
+            new int[]{1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(ciScore);
 
     int csScore = CreditScoreCalculate.getTopicScore(str, "cs:pun_content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令停产停业", "暂扣","吊销","行政拘留"},
-            new int[]{1, 1, 3, 3, 9, 9, 9});
+            new int[]{1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(csScore);
 
     int cmScore = CreditScoreCalculate.getTopicScore(str, "cm:pun_content",
@@ -76,7 +85,7 @@ public class CreditScoreCalculate {
 
     int trScore = CreditScoreCalculate.getTopicScore(str, "tr:penalty_content",
             new String[]{"ELSE", "警告", "罚款", "没收违法所得", "责令整改", "暂扣","吊销","行政拘留"},
-            new int[]{1, 1, 3, 3, 9, 9, 9});
+            new int[]{1, 1, 1, 3, 3, 9, 9, 9});
     counts.add(trScore);
 
 //    int dpScore = CreditScoreCalculate.getTopicScore(str, "dp:penalty_content", new String[]{"ELSE", "警告", "拘留"}, new int[]{1, 1, 6});
@@ -116,7 +125,7 @@ public class CreditScoreCalculate {
             new int[]{9});
     counts.add(cuScore);
 
-    int spScore = CreditScoreCalculate.getTopicScore(str, "sp:status",
+    int spScore = CreditScoreCalculate.getTopicScore(str, "sp:performance",
             new String[]{"ELSE", "全部未履行", "部分未履行"},
             new int[]{1, 9, 3});
     counts.add(spScore);
@@ -470,6 +479,7 @@ public class CreditScoreCalculate {
       ArrayList<Integer> counts = new ArrayList<Integer>(); // 所有关键字匹配数
       int resultScore = 0; // 信用分的和
       int countOne = cyCompareNumber(objectStr, "\\[\\[.*?" + topicKey +".*?\\]\\]"); // 总共条数
+      if(countOne == 0 ) return 0;
       for(int i = 1; i<keyWords.length; i++){
         int countSum = cyCompareNumber(objectStr, "\\[\\[.*?" + topicKey + ".*?" + keyWords[i] + ".*?\\]\\]");
         counts.add(countSum);
